@@ -4,7 +4,6 @@
 CameraData CAMERA = {        // Global CAMERA state context
     .mode = 0,
     .targetDistance = 0,
-    .playerEyesPosition = 1.85f,
     .angle = { 0 },
     .previousMousePosition = { 0 },
     .moveControl = { 'W', 'S', 'D', 'A', 'E', 'Q' },
@@ -23,7 +22,6 @@ void SetCamera(Camera camera)
     CAMERA.targetDistance = sqrtf(dx*dx + dy*dy + dz*dz);   // Distance to target
     CAMERA.angle.x = atan2f(dx, dz);                        // Camera angle in plane XZ (0 aligned with Z, move positive CCW)
     CAMERA.angle.y = atan2f(dy, sqrtf(dx*dx + dz*dz));      // Camera angle in plane XY (0 aligned with X, move positive CW)
-    CAMERA.playerEyesPosition = camera.position.y;          // Init player eyes position to camera Y position
     CAMERA.previousMousePosition = GetMousePosition();      // Init mouse position
     DisableCursor();
 }

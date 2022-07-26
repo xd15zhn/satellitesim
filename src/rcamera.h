@@ -29,7 +29,6 @@ typedef enum {
 typedef struct {
     unsigned int mode;              // Current camera mode
     float targetDistance;           // Camera distance from position to target
-    float playerEyesPosition;       // Player eyes position from ground (in meters)
     Vector2 angle;                  // Camera angle in plane XZ
     Vector2 previousMousePosition;  // Previous mouse position
     // Camera movement control keys
