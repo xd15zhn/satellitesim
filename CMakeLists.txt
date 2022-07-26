@@ -10,11 +10,17 @@ set(PROJECT_SOURCES
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+
+find_package(simucpp REQUIRED)
+message(STATUS "simucpp_DIR: ${simucpp_DIR}")
+message(STATUS "simucpp_VERSION: ${simucpp_VERSION}")
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CPP_LIBRARIES_PATH}/include
     ${PROJECT_SOURCE_DIR}/src
+    ${simucpp_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
     ${CPP_LIBRARIES_PATH}/lib/libraylib.a
     opengl32 gdi32 winmm
+    ${simucpp_LIBS}
 )
