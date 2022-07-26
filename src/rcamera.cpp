@@ -56,67 +56,29 @@ void UpdateCamera(Camera *camera)
 
     camera->position.y += (sinf(CAMERA.angle.y)*direction[MOVE_FRONT] -
                             sinf(CAMERA.angle.y)*direction[MOVE_BACK] +
-                            1.0f*direction[MOVE_UP] - 1.0f*direction[MOVE_DOWN])/PLAYER_MOVEMENT_SENSITIVITY;
+                            direction[MOVE_UP] - direction[MOVE_DOWN])/PLAYER_MOVEMENT_SENSITIVITY;
 
     camera->position.z += (cosf(CAMERA.angle.x)*direction[MOVE_BACK] -
                             cosf(CAMERA.angle.x)*direction[MOVE_FRONT] +
                             sinf(CAMERA.angle.x)*direction[MOVE_LEFT] -
                             sinf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
 
-    // Camera orientation calculation
     CAMERA.angle.x -= (CAMERA_MOUSE_MOVE_SENSITIVITY * mousePositionDelta.x);
     CAMERA.angle.y -= (CAMERA_MOUSE_MOVE_SENSITIVITY * mousePositionDelta.y);
-    // Angle clamp
     CAMERA.angle.y = VAL_LIMIT(CAMERA.angle.y, -1.57f, 1.57f);
-    // Calculate translation matrix
-    Matrix matTranslation = { 1.0f, 0.0f, 0.0f, 0.0f,
-                                0.0f, 1.0f, 0.0f, 0.0f,
-                                0.0f, 0.0f, 1.0f, (CAMERA.targetDistance/CAMERA_FREE_PANNING_DIVIDER),
-                                0.0f, 0.0f, 0.0f, 1.0f };
 
-    // Calculate rotation matrix
-    Matrix matRotation = { 1.0f, 0.0f, 0.0f, 0.0f,
-                            0.0f, 1.0f, 0.0f, 0.0f,
-                            0.0f, 0.0f, 1.0f, 0.0f,
-                            0.0f, 0.0f, 0.0f, 1.0f };
-
-    float cosz = cosf(0.0f);
-    float sinz = sinf(0.0f);
+    float cosz = 1.0f;
+    float sinz = 0.0f;
     float cosy = cosf(CAMERA.angle.x);
     float siny = sinf(CAMERA.angle.x);
     float cosx = cosf(CAMERA.angle.y);
     float sinx = sinf(CAMERA.angle.y);
+    float tx = (cosz*siny*cosx) + (sinz*sinx);
+    float ty = (sinz*siny*cosx) - (cosz*sinx);
+    float tz = cosy*cosx;
+    float dist = (CAMERA.targetDistance/CAMERA_FREE_PANNING_DIVIDER);
 
-    matRotation.m0 = cosz*cosy;
-    matRotation.m4 = (cosz*siny*sinx) - (sinz*cosx);
-    matRotation.m8 = (cosz*siny*cosx) + (sinz*sinx);
-    matRotation.m1 = sinz*cosy;
-    matRotation.m5 = (sinz*siny*sinx) + (cosz*cosx);
-    matRotation.m9 = (sinz*siny*cosx) - (cosz*sinx);
-    matRotation.m2 = -siny;
-    matRotation.m6 = cosy*sinx;
-    matRotation.m10= cosy*cosx;
-
-    // Multiply translation and rotation matrices
-    Matrix matTransform = { 0 };
-    matTransform.m0 = matTranslation.m0*matRotation.m0 + matTranslation.m1*matRotation.m4 + matTranslation.m2*matRotation.m8 + matTranslation.m3*matRotation.m12;
-    matTransform.m1 = matTranslation.m0*matRotation.m1 + matTranslation.m1*matRotation.m5 + matTranslation.m2*matRotation.m9 + matTranslation.m3*matRotation.m13;
-    matTransform.m2 = matTranslation.m0*matRotation.m2 + matTranslation.m1*matRotation.m6 + matTranslation.m2*matRotation.m10 + matTranslation.m3*matRotation.m14;
-    matTransform.m3 = matTranslation.m0*matRotation.m3 + matTranslation.m1*matRotation.m7 + matTranslation.m2*matRotation.m11 + matTranslation.m3*matRotation.m15;
-    matTransform.m4 = matTranslation.m4*matRotation.m0 + matTranslation.m5*matRotation.m4 + matTranslation.m6*matRotation.m8 + matTranslation.m7*matRotation.m12;
-    matTransform.m5 = matTranslation.m4*matRotation.m1 + matTranslation.m5*matRotation.m5 + matTranslation.m6*matRotation.m9 + matTranslation.m7*matRotation.m13;
-    matTransform.m6 = matTranslation.m4*matRotation.m2 + matTranslation.m5*matRotation.m6 + matTranslation.m6*matRotation.m10 + matTranslation.m7*matRotation.m14;
-    matTransform.m7 = matTranslation.m4*matRotation.m3 + matTranslation.m5*matRotation.m7 + matTranslation.m6*matRotation.m11 + matTranslation.m7*matRotation.m15;
-    matTransform.m8 = matTranslation.m8*matRotation.m0 + matTranslation.m9*matRotation.m4 + matTranslation.m10*matRotation.m8 + matTranslation.m11*matRotation.m12;
-    matTransform.m9 = matTranslation.m8*matRotation.m1 + matTranslation.m9*matRotation.m5 + matTranslation.m10*matRotation.m9 + matTranslation.m11*matRotation.m13;
-    matTransform.m10 = matTranslation.m8*matRotation.m2 + matTranslation.m9*matRotation.m6 + matTranslation.m10*matRotation.m10 + matTranslation.m11*matRotation.m14;
-    matTransform.m11 = matTranslation.m8*matRotation.m3 + matTranslation.m9*matRotation.m7 + matTranslation.m10*matRotation.m11 + matTranslation.m11*matRotation.m15;
-    matTransform.m12 = matTranslation.m12*matRotation.m0 + matTranslation.m13*matRotation.m4 + matTranslation.m14*matRotation.m8 + matTranslation.m15*matRotation.m12;
-    matTransform.m13 = matTranslation.m12*matRotation.m1 + matTranslation.m13*matRotation.m5 + matTranslation.m14*matRotation.m9 + matTranslation.m15*matRotation.m13;
-    matTransform.m14 = matTranslation.m12*matRotation.m2 + matTranslation.m13*matRotation.m6 + matTranslation.m14*matRotation.m10 + matTranslation.m15*matRotation.m14;
-    matTransform.m15 = matTranslation.m12*matRotation.m3 + matTranslation.m13*matRotation.m7 + matTranslation.m14*matRotation.m11 + matTranslation.m15*matRotation.m15;
-
-    camera->target.x = camera->position.x - matTransform.m12;
-    camera->target.y = camera->position.y - matTransform.m13;
-    camera->target.z = camera->position.z - matTransform.m14;
+    camera->target.x = camera->position.x - tx*dist;
+    camera->target.y = camera->position.y - ty*dist;
+    camera->target.z = camera->position.z - tz*dist;
 }

@@ -98,9 +98,9 @@ int main(void) {
         ShuttlePosition.x = ptemp.x;
         ShuttlePosition.y = ptemp.z;
         ShuttlePosition.z = ptemp.y;
-        cout << ptemp.x << " ";
-        cout << ptemp.y << " ";
-        cout << ptemp.z << "\r";
+        cout << camera.target.x << " ";
+        cout << camera.target.y << " ";
+        cout << camera.target.z << "\r";
 		UpdateCamera(&camera);
         BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -113,6 +113,6 @@ int main(void) {
         EndDrawing();
     }
     CloseWindow();
-    cout << "finished." << endl;
+    cout << "\nfinished." << endl;
     return 0;
 }
