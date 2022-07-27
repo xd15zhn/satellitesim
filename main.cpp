@@ -1,6 +1,5 @@
 #include <cmath>
 #include "rcamera.h"
-#include "raymath.h"
 #include "orbitalsim.hpp"
 
 int main(void) {
@@ -10,11 +9,11 @@ int main(void) {
     SetTargetFPS(60);
     Model model = LoadModel("SpaceShuttle.obj");
     Camera3D camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 00.0f, 10.0f };
+    camera.position = (Vector3){ 0.0f, 10.0f, 10.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
-	SetCamera(camera);
+	SetCamera(&camera);
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
     Vector3 ShuttlePosition, ShuttleVelocity;
     Vector3d vec3d;
