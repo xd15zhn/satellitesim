@@ -1,5 +1,6 @@
 #include <cmath>
 #include "rcamera.h"
+#include "raymath.h"
 #include "orbitalsim.hpp"
 
 int main(void) {
@@ -9,22 +10,28 @@ int main(void) {
     SetTargetFPS(60);
     Model model = LoadModel("SpaceShuttle.obj");
     Camera3D camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 0.0f, 10.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 20.0f };
+    camera.position = (Vector3){ 0.0f, 00.0f, 10.0f };
+    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 45.0f;
 	SetCamera(camera);
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
-    Vector3 ShuttlePosition;
-    Vector3d ptemp;
+    Vector3 ShuttlePosition, ShuttleVelocity;
+    Vector3d vec3d;
     double t;
     // ToggleFullscreen();
     while (!WindowShouldClose()) {
         t = GetTime();
-        ptemp = shuffle.Simulate(10);
-        ShuttlePosition.x = ptemp._x;
-        ShuttlePosition.y = ptemp._z;
-        ShuttlePosition.z = ptemp._y;
+        shuffle.Simulate(10);
+        vec3d = shuffle.Get_R();
+        ShuttlePosition.x = vec3d._x;
+        ShuttlePosition.y = vec3d._z;
+        ShuttlePosition.z = vec3d._y;
+        vec3d = shuffle.Get_V();
+        ShuttleVelocity.x = vec3d._x;
+        ShuttleVelocity.y = vec3d._z;
+        ShuttleVelocity.z = vec3d._y;
+        model.transform = MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity.x, ShuttleVelocity.z), 0});
 		UpdateCamera(&camera);
         BeginDrawing();
             ClearBackground(RAYWHITE);

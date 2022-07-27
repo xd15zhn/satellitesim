@@ -14,8 +14,8 @@ CameraData CAMERA = {        // Global CAMERA state context
 
 void SetCamera(Camera camera)
 {
-    Vector3 v1 = camera.position;
-    Vector3 v2 = camera.target;
+    Vector3 v1 = camera.target;
+    Vector3 v2 = camera.position;
     float dx = v2.x - v1.x;
     float dy = v2.y - v1.y;
     float dz = v2.z - v1.z;

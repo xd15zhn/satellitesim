@@ -44,14 +44,22 @@ public:
         sim1.Initialize();
         _simstep = sim1.Get_SimStep();
     };
-    Vector3d Simulate(double time) {
+    void Simulate(double time) {
         int stepcnt = (int)(time/_simstep/1000.0+0.5);
         for (int i=0; i<stepcnt; ++i)
             sim1.Simulate_OneStep();
-        float x = intrx->Get_OutValue();
-        float y = intry->Get_OutValue();
-        float z = intrz->Get_OutValue();
-        return Vector3d(x, y, z);
+    }
+    Vector3d Get_R() {
+        return Vector3d(
+            intrx->Get_OutValue(),
+            intry->Get_OutValue(),
+            intrz->Get_OutValue());
+    }
+    Vector3d Get_V() {
+        return Vector3d(
+            intvx->Get_OutValue(),
+            intvy->Get_OutValue(),
+            intvz->Get_OutValue());
     }
     void Reset(void){
         sim1.Simulation_Reset();
