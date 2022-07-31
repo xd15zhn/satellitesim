@@ -24,11 +24,17 @@ int main(void) {
     SetShaderValue(shdrCubemap, id, a, SHADER_UNIFORM_INT);
     char skyboxFileName[256] = { 0 };
     Texture2D panorama;
-    Image img = LoadImage("skybox.png");
-    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(img, CUBEMAP_LAYOUT_AUTO_DETECT);    // CUBEMAP_LAYOUT_PANORAMA
-    UnloadImage(img);
+    Image imgskybox = LoadImage("skybox.png");
+    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(imgskybox, CUBEMAP_LAYOUT_AUTO_DETECT);    // CUBEMAP_LAYOUT_PANORAMA
+    UnloadImage(imgskybox);
 
-    Model model = LoadModel("SpaceShuttle.obj");
+    Model modelSatellite = LoadModel("satellite.obj");
+    Model modelSun = LoadModel("sun.obj");
+    Texture2D imgSun = LoadTexture("sun.png");
+    Texture2D imgSatellite = LoadTexture("satellite.png");
+    modelSun.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSun;
+    modelSatellite.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSatellite;
+
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 0.0f, 10.0f, 10.0f };
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
@@ -51,7 +57,7 @@ int main(void) {
         ShuttleVelocity.x = vec3d._x;
         ShuttleVelocity.y = vec3d._z;
         ShuttleVelocity.z = vec3d._y;
-        model.transform = MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity.x, ShuttleVelocity.z), 0});
+        modelSatellite.transform = MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity.x, ShuttleVelocity.z), 0});
 		UpdateCamera(&camera);
 
         if (IsFileDropped()) {
@@ -60,9 +66,9 @@ int main(void) {
             if (count == 1) {
                 if (IsFileExtension(droppedFiles[0], ".png;.jpg;.hdr;.bmp;.tga")) {
                     UnloadTexture(skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture);
-                    Image img = LoadImage(droppedFiles[0]);
-                    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(img, CUBEMAP_LAYOUT_AUTO_DETECT);
-                    UnloadImage(img);
+                    Image imgskybox = LoadImage(droppedFiles[0]);
+                    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(imgskybox, CUBEMAP_LAYOUT_AUTO_DETECT);
+                    UnloadImage(imgskybox);
                     TextCopy(skyboxFileName, droppedFiles[0]);
                 }
             }
@@ -72,9 +78,6 @@ int main(void) {
         BeginDrawing();
             ClearBackground(RAYWHITE);
             BeginMode3D(camera);
-                DrawGrid(100, 5);
-                DrawSphere(cubePosition, 2.0f, ORANGE);
-                DrawModel(model, ShuttlePosition, 1.0, BLUE);
 
                 rlDisableBackfaceCulling();
                 rlDisableDepthMask();
@@ -82,6 +85,10 @@ int main(void) {
                 rlEnableBackfaceCulling();
                 rlEnableDepthMask();
 
+                // DrawGrid(100, 5);
+                // DrawSphere(cubePosition, 2.0f, ORANGE);
+                DrawModel(modelSun, (Vector3){ 0.0f, 0.0f, 0.0f }, 10.0f, WHITE);
+                DrawModel(modelSatellite, ShuttlePosition, 0.01, WHITE);
             EndMode3D();
             DrawFPS(10, 10);
         EndDrawing();

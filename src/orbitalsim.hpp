@@ -39,7 +39,7 @@ public:
         intrx->Set_InitialValue(15);
         intry->Set_InitialValue(0);
         intvx->Set_InitialValue(0);
-        intvy->Set_InitialValue(12);
+        intvy->Set_InitialValue(20);
         sim1.Set_SimStep(0.01);
         sim1.Initialize();
         _simstep = sim1.Get_SimStep();
