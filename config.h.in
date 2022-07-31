@@ -1,0 +1,10 @@
+#define satellitesim_VERSION_MAJOR  @satellitesim_VERSION_MAJOR@
+#define satellitesim_VERSION_MINOR  @satellitesim_VERSION_MINOR@
+#define satellitesim_VERSION_PATCH  @satellitesim_VERSION_PATCH@
+#define satellitesim_VERSION_TWEAK  @satellitesim_VERSION_TWEAK@
+
+#define STRING_DIRECT(x)            #x
+#define STRING(x)                   STRING_DIRECT(x)
+
+#define RESOURCES_DIR               STRING(${PROJECT_SOURCE_DIR}/resources/)
+#define GLSL_DIR                    STRING(${PROJECT_SOURCE_DIR}/src/)

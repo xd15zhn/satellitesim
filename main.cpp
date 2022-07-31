@@ -17,11 +17,11 @@ int main(void) {
     Init_Skybox();
 
     /*加载模型和纹理*/
-    Model modelSun = LoadModel("sun.obj");
-    Texture2D imgSun = LoadTexture("sun.png");
+    Model modelSun = LoadModel(RESOURCES_DIR"sphere.obj");
+    Texture2D imgSun = LoadTexture(RESOURCES_DIR"sun.png");
     modelSun.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSun;
-    Model modelSatellite = LoadModel("satellite.obj");
-    Texture2D imgSatellite = LoadTexture("satellite.png");
+    Model modelSatellite = LoadModel(RESOURCES_DIR"satellite.obj");
+    Texture2D imgSatellite = LoadTexture(RESOURCES_DIR"satellite.png");
     modelSatellite.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSatellite;
 
     /*添加全局变量*/
