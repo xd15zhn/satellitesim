@@ -6,7 +6,9 @@ list(APPEND CMAKE_PREFIX_PATH ${CPP_LIBRARIES_PATH})
 
 set(PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/main.cpp
-    ${PROJECT_SOURCE_DIR}/src/rcamera.cpp
+    ${PROJECT_SOURCE_DIR}/src/orbitalsim.cpp
+    ${PROJECT_SOURCE_DIR}/src/camera.cpp
+    ${PROJECT_SOURCE_DIR}/src/skybox.cpp
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})

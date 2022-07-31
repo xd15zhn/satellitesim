@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "raymath.h"
 
-void SetCamera(Camera *camera);
-void UpdateCamera(Camera *camera);
+void Init_Camera(Camera *camera);
+void Update_Camera(Camera *camera);
 
 #endif // CAMERA_H

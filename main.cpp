@@ -1,92 +1,55 @@
 #include <cmath>
-#include "rcamera.h"
-#include "rlgl.h"
 #include "orbitalsim.hpp"
+#include "camera.h"
+#include "skybox.h"
 
 int main(void) {
-    Orbital_Simulator shuffle;
+    /*为每个运动的模型添加仿真器*/
+    Orbital_Simulator simSatellite;
+
+    /*初始化场景*/
+    Camera camera;
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(960, 540, "RayLib-3D");
     SetTargetFPS(60);
+    InitWindow(960, 540, "RayLib-3D");
+    // ToggleFullscreen();
+	Init_Camera(&camera);
+    Init_Skybox();
 
-    Mesh cube = GenMeshCube(1.0f, 1.0f, 1.0f);
-    Model skybox = LoadModelFromMesh(cube);
-    int id, a[1];
-    skybox.materials[0].shader = LoadShader("skyboxvs.glsl", "skyboxfs.glsl");
-    id = GetShaderLocation(skybox.materials[0].shader, "environmentMap"); a[0] = MATERIAL_MAP_CUBEMAP;
-    SetShaderValue(skybox.materials[0].shader, id, a, SHADER_UNIFORM_INT);
-    id = GetShaderLocation(skybox.materials[0].shader, "doGamma"); a[0] = 0;
-    SetShaderValue(skybox.materials[0].shader, id, a, SHADER_UNIFORM_INT);
-    id = GetShaderLocation(skybox.materials[0].shader, "vflipped"); a[0] = 0;
-    SetShaderValue(skybox.materials[0].shader, id, a, SHADER_UNIFORM_INT);
-    Shader shdrCubemap = LoadShader("cubemapvs.glsl", "cubemapfs.glsl");
-    id = GetShaderLocation(shdrCubemap, "equirectangularMap"); a[0] = 0;
-    SetShaderValue(shdrCubemap, id, a, SHADER_UNIFORM_INT);
-    char skyboxFileName[256] = { 0 };
-    Texture2D panorama;
-    Image imgskybox = LoadImage("skybox.png");
-    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(imgskybox, CUBEMAP_LAYOUT_AUTO_DETECT);    // CUBEMAP_LAYOUT_PANORAMA
-    UnloadImage(imgskybox);
-
-    Model modelSatellite = LoadModel("satellite.obj");
+    /*加载模型和纹理*/
     Model modelSun = LoadModel("sun.obj");
     Texture2D imgSun = LoadTexture("sun.png");
-    Texture2D imgSatellite = LoadTexture("satellite.png");
     modelSun.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSun;
+    Model modelSatellite = LoadModel("satellite.obj");
+    Texture2D imgSatellite = LoadTexture("satellite.png");
     modelSatellite.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = imgSatellite;
 
-    Camera3D camera = { 0 };
-    camera.position = (Vector3){ 0.0f, 10.0f, 10.0f };
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 45.0f;
-	SetCamera(&camera);
+    /*添加全局变量*/
     Vector3 cubePosition = { 0.0f, 0.0f, 0.0f };
     Vector3 ShuttlePosition, ShuttleVelocity;
     Vector3d vec3d;
     double t;
-    // ToggleFullscreen();
+
+    /*场景循环*/
     while (!WindowShouldClose()) {
+        
         t = GetTime();
-        shuffle.Simulate(10);
-        vec3d = shuffle.Get_R();
+        simSatellite.Simulate(10);
+        vec3d = simSatellite.Get_R();
         ShuttlePosition.x = vec3d._x;
         ShuttlePosition.y = vec3d._z;
         ShuttlePosition.z = vec3d._y;
-        vec3d = shuffle.Get_V();
+        vec3d = simSatellite.Get_V();
         ShuttleVelocity.x = vec3d._x;
         ShuttleVelocity.y = vec3d._z;
         ShuttleVelocity.z = vec3d._y;
         modelSatellite.transform = MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity.x, ShuttleVelocity.z), 0});
-		UpdateCamera(&camera);
-
-        if (IsFileDropped()) {
-            int count = 0;
-            char **droppedFiles = GetDroppedFiles(&count);
-            if (count == 1) {
-                if (IsFileExtension(droppedFiles[0], ".png;.jpg;.hdr;.bmp;.tga")) {
-                    UnloadTexture(skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture);
-                    Image imgskybox = LoadImage(droppedFiles[0]);
-                    skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(imgskybox, CUBEMAP_LAYOUT_AUTO_DETECT);
-                    UnloadImage(imgskybox);
-                    TextCopy(skyboxFileName, droppedFiles[0]);
-                }
-            }
-            ClearDroppedFiles();
-        }
+		Update_Camera(&camera);
 
         BeginDrawing();
             ClearBackground(RAYWHITE);
             BeginMode3D(camera);
-
-                rlDisableBackfaceCulling();
-                rlDisableDepthMask();
-                DrawModel(skybox, (Vector3){0, 0, 0}, 1.0f, WHITE);
-                rlEnableBackfaceCulling();
-                rlEnableDepthMask();
-
-                // DrawGrid(100, 5);
-                // DrawSphere(cubePosition, 2.0f, ORANGE);
+                Update_Skybox();
                 DrawModel(modelSun, (Vector3){ 0.0f, 0.0f, 0.0f }, 10.0f, WHITE);
                 DrawModel(modelSatellite, ShuttlePosition, 0.01, WHITE);
             EndMode3D();

@@ -1,5 +1,5 @@
 #include <cmath>
-#include "rcamera.h"
+#include "camera.h"
 #define VAL_LIMIT(x, min, max)           (((x)<=(min) ? (min) : ((x)>=(max) ? (max) : (x))))
 #include <iostream>
 using namespace std;
@@ -21,8 +21,12 @@ float MouseMoveSensitivity = 0.003f;
 float MouseScrolSensitivity = 1.5f;
 float PlayerMoveSensitivity = 8.0f;
 
-void SetCamera(Camera *camera)
+void Init_Camera(Camera *camera)
 {
+    camera->position = (Vector3){ 0.0f, 10.0f, 10.0f };
+    camera->target = (Vector3){ 0.0f, 0.0f, 0.0f };
+    camera->up = (Vector3){ 0.0f, 1.0f, 0.0f };
+    camera->fovy = 45.0f;
     camera->target = Vector3Subtract(camera->position, camera->target);
     camera->target = Vector3Add(camera->position, camera->target);
     Vector3 v1 = camera->position;
@@ -36,7 +40,7 @@ void SetCamera(Camera *camera)
     DisableCursor();
 }
 
-void UpdateCamera(Camera *camera)
+void Update_Camera(Camera *camera)
 {
     Vector2 mousePositionDelta = { 0.0f, 0.0f };
     Vector2 mousePosition = GetMousePosition();
