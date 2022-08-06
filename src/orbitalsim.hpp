@@ -2,16 +2,17 @@
 #define ORBITALSIM_H
 
 #include "simucpp.hpp"
+#include "raymath.h"
+
 using namespace simucpp;
-using namespace zhnmat;
 
 class Orbital_Simulator
 {
 public:
     Orbital_Simulator();
     void Simulate(double time);
-    Vector3d Get_R();
-    Vector3d Get_V();
+    Vector3 Get_R();
+    Vector3 Get_V();
     void Reset(void);
 private:
     Simulator sim1;

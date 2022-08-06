@@ -24,8 +24,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
     ${CPP_LIBRARIES_PATH}/lib/libraylib.a
+    ${CPP_LIBRARIES_PATH}/lib/libglfw3.a
     opengl32 gdi32 winmm
     ${simucpp_LIBS}
 )
-
-configure_file(config.h.in config.h)

@@ -27,8 +27,8 @@ Orbital_Simulator::Orbital_Simulator() {
     sim1.connectU(intry, proday);
     sim1.connectU(intrz, prodaz);
     misomur->Set_Function([](double *u){
-        Vector3d r(u[0], u[1], u[2]);
-        double ans = r.norm2();
+        double ans = u[0]*u[0] + u[1]*u[1] + u[2]*u[2];
+        ans = sqrt(ans);
         return -5000.0 / (ans*ans*ans);
     });
     intrx->Set_InitialValue(15);
@@ -46,18 +46,18 @@ void Orbital_Simulator::Simulate(double time) {
         sim1.Simulate_OneStep();
 }
 
-Vector3d Orbital_Simulator::Get_R() {
-    return Vector3d(
-        intrx->Get_OutValue(),
-        intry->Get_OutValue(),
-        intrz->Get_OutValue());
+Vector3 Orbital_Simulator::Get_R() {
+    return Vector3{
+        (float)(intrx->Get_OutValue()),
+        (float)(intry->Get_OutValue()),
+        (float)(intrz->Get_OutValue())};
 }
 
-Vector3d Orbital_Simulator::Get_V() {
-    return Vector3d(
-        intvx->Get_OutValue(),
-        intvy->Get_OutValue(),
-        intvz->Get_OutValue());
+Vector3 Orbital_Simulator::Get_V() {
+    return Vector3{
+        (float)(intvx->Get_OutValue()),
+        (float)(intvy->Get_OutValue()),
+        (float)(intvz->Get_OutValue())};
 }
 
 void Orbital_Simulator::Reset(void){

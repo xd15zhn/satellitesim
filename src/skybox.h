@@ -3,7 +3,6 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "rlgl.h"
-#include "config.h"
 
 void Init_Skybox();
 void Update_Skybox();
