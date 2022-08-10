@@ -11,6 +11,9 @@ class Orbital_Simulator
 public:
     Orbital_Simulator();
     void Simulate(double time);
+    void Set_initRV(Vector3 vecR, Vector3 vecV);
+    void Set_initR(Vector3 vec);
+    void Set_initV(Vector3 vec);
     Vector3 Get_R();
     Vector3 Get_V();
     void Reset(void);

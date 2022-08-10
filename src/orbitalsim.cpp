@@ -31,10 +31,6 @@ Orbital_Simulator::Orbital_Simulator() {
         ans = sqrt(ans);
         return -5000.0 / (ans*ans*ans);
     });
-    intrx->Set_InitialValue(15);
-    intry->Set_InitialValue(0);
-    intvx->Set_InitialValue(0);
-    intvy->Set_InitialValue(20);
     sim1.Set_SimStep(0.01);
     sim1.Initialize();
     _simstep = sim1.Get_SimStep();
@@ -46,13 +42,26 @@ void Orbital_Simulator::Simulate(double time) {
         sim1.Simulate_OneStep();
 }
 
+void Orbital_Simulator::Set_initRV(Vector3 vecR, Vector3 vecV) {
+    Set_initR(vecR); Set_initV(vecV);
+}
+void Orbital_Simulator::Set_initR(Vector3 vec) {
+    intrx->Set_InitialValue(vec.x);
+    intry->Set_InitialValue(vec.y);
+    intrz->Set_InitialValue(vec.z);
+}
+void Orbital_Simulator::Set_initV(Vector3 vec) {
+    intvx->Set_InitialValue(vec.x);
+    intvy->Set_InitialValue(vec.y);
+    intvz->Set_InitialValue(vec.z);
+}
+
 Vector3 Orbital_Simulator::Get_R() {
     return Vector3{
         (float)(intrx->Get_OutValue()),
         (float)(intry->Get_OutValue()),
         (float)(intrz->Get_OutValue())};
 }
-
 Vector3 Orbital_Simulator::Get_V() {
     return Vector3{
         (float)(intvx->Get_OutValue()),
