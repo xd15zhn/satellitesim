@@ -23,7 +23,7 @@ float PlayerMoveSensitivity = 8.0f;
 
 void Init_Camera(Camera *camera)
 {
-    camera->position = (Vector3){ 0.0f, 10.0f, 10.0f };
+    camera->position = (Vector3){ 0.0f, 25.0f, 25.0f };
     camera->target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera->up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera->fovy = 45.0f;
