@@ -14,17 +14,18 @@ set(PROJECT_SOURCES
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 
 find_package(simucpp REQUIRED)
+find_package(raylib REQUIRED)
 message(STATUS "simucpp_DIR: ${simucpp_DIR}")
 message(STATUS "simucpp_VERSION: ${simucpp_VERSION}")
+message(STATUS "raylib_DIR: ${raylib_DIR}")
+message(STATUS "raylib_VERSION: ${raylib_VERSION}")
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CPP_LIBRARIES_PATH}/include
     ${PROJECT_SOURCE_DIR}/src
-    ${PROJECT_BINARY_DIR}
     ${simucpp_INCLUDE_DIRS}
+    ${raylib_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    ${CPP_LIBRARIES_PATH}/lib/libraylib.a
-    ${CPP_LIBRARIES_PATH}/lib/libglfw3.a
-    opengl32 gdi32 winmm
+    ${raylib_LIBS}
     ${simucpp_LIBS}
 )
