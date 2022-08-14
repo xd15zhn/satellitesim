@@ -3,8 +3,8 @@ WSAD分别控制视角的前后左右移动，EQ分别控制上下移动。
 这是第一视角漫游模式，后面可能会加常见的3D模型显示模式。  
 
 ## 依赖库
-[raylib](https://gitee.com/xd15zhn/raylib)
-[simucpp](https://gitee.com/xd15zhn/simucpp)
+[raylib](https://gitee.com/xd15zhn/raylib)  
+[simucpp](https://gitee.com/xd15zhn/simucpp)  
 
 ## 可执行文件运行说明
 在`satellitesim.exe`同级目录下新建文件夹并重命名为`resources`，将附件中所有资源文件移到该文件夹中，然后运行exe文件。  
