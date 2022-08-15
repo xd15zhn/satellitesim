@@ -4,7 +4,6 @@
 #include <list>
 #include "simucpp.hpp"
 #include "raylib.h"
-#include "raymath.h"
 
 using namespace simucpp;
 

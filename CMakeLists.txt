@@ -15,9 +15,9 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 
 find_package(simucpp REQUIRED)
 find_package(raylib REQUIRED)
-message(STATUS "simucpp_DIR: ${simucpp_DIR}")
+message(STATUS "simucpp_LIBS: ${simucpp_LIBS}")
 message(STATUS "simucpp_VERSION: ${simucpp_VERSION}")
-message(STATUS "raylib_DIR: ${raylib_DIR}")
+message(STATUS "raylib_LIBS: ${raylib_LIBS}")
 message(STATUS "raylib_VERSION: ${raylib_VERSION}")
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CPP_LIBRARIES_PATH}/include

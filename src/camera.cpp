@@ -1,8 +1,6 @@
-#include <cmath>
 #include "camera.h"
+#include <cmath>
 #define VAL_LIMIT(x, min, max)           (((x)<=(min) ? (min) : ((x)>=(max) ? (max) : (x))))
-#include <iostream>
-using namespace std;
 
 enum{
     MOVE_FRONT = 0,

@@ -10,7 +10,7 @@ int main(void) {
     SetTraceLogLevel(LOG_WARNING);
     SetTargetFPS(60);
     InitGraph(1024, 768, "RayLib-3D");
-    // SetTraceLogLevel(LOG_INFO);
+    SetTraceLogLevel(LOG_INFO);
     // ToggleFullscreen();
 	Init_Camera(&camera);
     Init_Skybox();

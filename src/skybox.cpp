@@ -1,6 +1,5 @@
 #include "skybox.h"
 #include "raylib.h"
-#include "raymath.h"
 #include "rlgl.h"
 
 Model skybox;
