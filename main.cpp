@@ -2,7 +2,6 @@
 #include "orbitalsim.hpp"
 #include "camera.h"
 #include "skybox.h"
-#include <iostream>
 
 int main(void) {
     /*初始化场景*/
@@ -22,6 +21,7 @@ int main(void) {
     satellites[1].Set_initRV(Vector3{15, 0, 5}, Vector3{0, 21, 0});
     satellites[2].Set_initRV(Vector3{15, 1, -5}, Vector3{0, 20, 0});
     for (int i = 0; i < 3; i++) {
+        satellites[i].Set_ID(i);
         satellites[i].Load_Model("resources/satellite.obj", "resources/satellite.png");
         satellites[i].Set_Scale(0.01);
     }

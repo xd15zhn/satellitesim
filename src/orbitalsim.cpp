@@ -1,6 +1,14 @@
 #include "orbitalsim.hpp"
 
-Orbital_Object::Orbital_Object() {
+//--------------------------------------------------------------------------------------------
+// 初始化
+//--------------------------------------------------------------------------------------------
+Orbital_Object::Orbital_Object(int id): _id(id) {
+    /* 3D模型部分 */
+    for (int i = 0; i < _oparam._PointNum; i++)
+        _Points.push_back(Vector3{0, 0, 0});
+
+    /* 仿真器部分 */
     SUIntegrator(_intrx, &_sim1);
     SUIntegrator(_intry, &_sim1);
     SUIntegrator(_intrz, &_sim1);
@@ -32,6 +40,7 @@ Orbital_Object::Orbital_Object() {
         return -5000.0 / (ans*ans*ans);
     });
     _sim1.Set_SimStep(0.01);
+    _sim1.Set_WarningLevel(1);
     _sim1.Initialize();
     _simstep = _sim1.Get_SimStep();
 }
@@ -47,11 +56,29 @@ void Orbital_Object::Load_Model(const char* objfile, const char* pngfile) {
 void Orbital_Object::Update_Model(Matrix transform) {
     _model.transform = transform;
     Vector3 pos = Get_R();
-    DrawModel(_model, (Vector3){pos.x, pos.z, pos.y}, _scale, WHITE);
+    pos = (Vector3){pos.x, pos.z, pos.y};
+    DrawModel(_model, pos, _scale, WHITE);
+    if (!_draw) return;
+    Vector3 posstart, posend;
+    std::list<Vector3>::iterator it = _Points.begin();
+    posstart = *it;
+    it++;
+    for (; it != _Points.end(); ++it) {
+        posend = *it;
+        DrawLine3D(posstart, posend, RAYWHITE);
+        posstart = posend;
+    }
+    _oparam._cnt++;
+    if (_oparam._cnt<_oparam._PointInterval) return;
+    _oparam._cnt = 0;
+    _Points.push_back(pos);
+    _Points.pop_front();
 }
 void Orbital_Object::Set_Scale(double scale) {
     _scale = scale;
 }
+void Orbital_Object::Set_ID(int id) { _id=id; }
+void Orbital_Object::Set_DrawOrbit(bool draw) { _draw=draw; }
 
 //--------------------------------------------------------------------------------------------
 // 仿真器部分
@@ -61,7 +88,6 @@ void Orbital_Object::Simulate(double time) {
     for (int i=0; i<stepcnt; ++i)
         _sim1.Simulate_OneStep();
 }
-
 void Orbital_Object::Set_initRV(Vector3 vecR, Vector3 vecV) {
     Set_initR(vecR); Set_initV(vecV);
 }
@@ -69,13 +95,15 @@ void Orbital_Object::Set_initR(Vector3 vec) {
     _intrx->Set_InitialValue(vec.x);
     _intry->Set_InitialValue(vec.y);
     _intrz->Set_InitialValue(vec.z);
+    _Points.clear();
+    for (int i = 0; i < _oparam._PointNum; i++)
+        _Points.push_back((Vector3){vec.x, vec.z, vec.y});
 }
 void Orbital_Object::Set_initV(Vector3 vec) {
     _intvx->Set_InitialValue(vec.x);
     _intvy->Set_InitialValue(vec.y);
     _intvz->Set_InitialValue(vec.z);
 }
-
 Vector3 Orbital_Object::Get_R() {
     return Vector3{
         (float)(_intrx->Get_OutValue()),
@@ -88,7 +116,6 @@ Vector3 Orbital_Object::Get_V() {
         (float)(_intvy->Get_OutValue()),
         (float)(_intvz->Get_OutValue())};
 }
-
 void Orbital_Object::Reset(void) {
     _sim1.Simulation_Reset();
 }
