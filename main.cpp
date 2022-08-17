@@ -7,10 +7,8 @@ int main(void) {
     /*初始化场景*/
     Camera camera;
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
-    SetTraceLogLevel(LOG_WARNING);
     SetTargetFPS(60);
     InitGraph(1024, 768, "RayLib-3D");
-    SetTraceLogLevel(LOG_INFO);
     // ToggleFullscreen();
 	Init_Camera(&camera);
     Init_Skybox();

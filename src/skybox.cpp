@@ -1,7 +1,5 @@
 #include "skybox.h"
 #include "raylib.h"
-#include "rlgl.h"
-
 Model skybox;
 
 void Init_Skybox() {
@@ -21,9 +19,7 @@ void Init_Skybox() {
 }
 
 void Update_Skybox() {
-    rlDisableBackfaceCulling();
-    rlDisableDepthMask();
+    BeginBackground();
     DrawModel(skybox, (Vector3){0, 0, 0}, 1.0f, WHITE);
-    rlEnableBackfaceCulling();
-    rlEnableDepthMask();
+    EndBackground();
 }
