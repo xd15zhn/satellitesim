@@ -1,15 +1,17 @@
 #include <cmath>
 #include "orbitalsim.hpp"
-#include "camera.h"
 #include "skybox.h"
+#include "tracelog.h"
 
 int main(void) {
     /*初始化场景*/
     Camera camera;
+    SetTraceLogLevel(LOG_WARNING);
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
+	SetConfigFlags(FLAG_FULLSCREEN_MODE);
     SetTargetFPS(60);
-    InitGraph(1024, 768, "RayLib-3D");
-    // ToggleFullscreen();
+    // InitGraph(1024, 768, "RayLib-3D");
+    InitGraph(1920, 1200, "RayLib-3D");
 	Init_Camera(&camera);
     Init_Skybox();
 
@@ -32,6 +34,7 @@ int main(void) {
     /*添加全局变量*/
     Vector3 ShuttleVelocity[3];
     Vector3 vec3d;
+    int cnt = 0;
 
     /*场景循环*/
     while (!WindowShouldClose()) {
@@ -51,7 +54,11 @@ int main(void) {
                 for (int i = 0; i < 3; i++)
                     satellites[i].Update_Model(MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity[i].x, ShuttleVelocity[i].z), 0}));
             EndMode3D();
+            cnt++;
             DrawFPS(10, 10);
+            if (cnt>=30) {
+                cnt = 0;
+            }
         EndDrawing();
     }
     CloseGraph();
