@@ -1,6 +1,5 @@
-#include <cmath>
 #include "orbitalsim.hpp"
-#include "skybox.h"
+#include "utils.h"
 #include "tracelog.h"
 
 int main(void) {
@@ -34,7 +33,8 @@ int main(void) {
     /*添加全局变量*/
     Vector3 ShuttleVelocity[3];
     Vector3 vec3d;
-    int cnt = 0;
+    int cnt = 30;
+    int showfps=0, showcpu=0;
 
     /*场景循环*/
     while (!WindowShouldClose()) {
@@ -55,10 +55,13 @@ int main(void) {
                     satellites[i].Update_Model(MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity[i].x, ShuttleVelocity[i].z), 0}));
             EndMode3D();
             cnt++;
-            DrawFPS(10, 10);
             if (cnt>=30) {
                 cnt = 0;
+                showfps = GetFPS();
+                showcpu = GetCPUusage();
             }
+            DrawText(TextFormat("%2i FPS", showfps), 0, 0, 20, LIME);
+            DrawText(TextFormat("%2i %%", showcpu), 0, 30, 20, LIME);
         EndDrawing();
     }
     CloseGraph();

@@ -1,5 +1,5 @@
-#include "skybox.h"
 #include "raylib.h"
+
 Model skybox;
 
 void Init_Skybox() {
@@ -17,9 +17,11 @@ void Init_Skybox() {
     skybox.materials[0].maps[MATERIAL_MAP_CUBEMAP].texture = LoadTextureCubemap(imgskybox, CUBEMAP_LAYOUT_AUTO_DETECT);
     UnloadImage(imgskybox);
 }
-
 void Update_Skybox() {
     BeginBackground();
     DrawModel(skybox, (Vector3){0, 0, 0}, 1.0f, WHITE);
     EndBackground();
 }
+
+void DrawFPS(int fps) { DrawText(TextFormat("%2i FPS", fps), 0, 0, 20, LIME); }
+void DrawCPUusage(int cpu) { DrawText(TextFormat("%2i %%", cpu), 0, 30, 20, LIME); }
