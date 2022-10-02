@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(satellitesim VERSION 0.1.2)
+project(satellitesim VERSION 0.1.3)
 set(CMAKE_BUILD_TYPE release)
 set(CPP_LIBRARIES_PATH "E:/cpplibraries/")
 list(APPEND CMAKE_PREFIX_PATH ${CPP_LIBRARIES_PATH})
@@ -7,6 +7,7 @@ list(APPEND CMAKE_PREFIX_PATH ${CPP_LIBRARIES_PATH})
 set(PROJECT_SOURCES
     ${PROJECT_SOURCE_DIR}/main.cpp
     ${PROJECT_SOURCE_DIR}/src/orbitalsim.cpp
+    ${PROJECT_SOURCE_DIR}/src/camera.c
     ${PROJECT_SOURCE_DIR}/src/utils.c
 )
 

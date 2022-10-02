@@ -5,12 +5,11 @@
 int main(void) {
     /*初始化场景*/
     Camera camera;
-    SetTraceLogLevel(LOG_WARNING);
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	SetConfigFlags(FLAG_FULLSCREEN_MODE);
     SetTargetFPS(60);
     // InitGraph(1024, 768, "RayLib-3D");
-    InitGraph(1920, 1200, "RayLib-3D");
+    InitGraph(0, 0, "RayLib-3D");
 	Init_Camera(&camera);
     Init_Skybox();
 

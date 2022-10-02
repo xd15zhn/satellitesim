@@ -2,6 +2,7 @@
 #define ORBITALSIM_H
 
 #include <list>
+#include <cmath>
 #include "simucpp.hpp"
 #include "raylib.h"
 
