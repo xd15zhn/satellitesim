@@ -1,10 +1,11 @@
 #include "raylib.h"
+#include <stdio.h>
 #include <math.h>
 
 #define VAL_LIMIT(x, min, max)           (((x)<=(min) ? (min) : ((x)>=(max) ? (max) : (x))))
 #define MouseMoveSensitivity             0.003f
 #define MouseScrolSensitivity            1.5f
-#define PlayerMoveSensitivity            8.0f
+#define CameraMoveExponential            1.2f
 
 typedef enum {
     MOVE_FRONT = 0,
@@ -18,6 +19,9 @@ typedef enum {
 Vector2 angle;
 Vector2 previousMousePosition;
 const int moveControl[6] = { 'W', 'S', 'D', 'A', 'E', 'Q' };
+float CameraMoveSensitivity;
+
+float GetCameraSpeed() { return CameraMoveSensitivity; }
 
 void Init_Camera(Camera *camera)
 {
@@ -25,16 +29,13 @@ void Init_Camera(Camera *camera)
     camera->target = (Vector3){ 0.0f, 0.0f, 0.0f };
     camera->up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera->fovy = 45.0f;
-    camera->target = Vector3Subtract(camera->position, camera->target);
-    camera->target = Vector3Add(camera->position, camera->target);
-    Vector3 v1 = camera->position;
-    Vector3 v2 = camera->target;
-    float dx = v2.x - v1.x;
-    float dy = v2.y - v1.y;
-    float dz = v2.z - v1.z;
+    float dx = camera->position.x - camera->target.x;
+    float dy = camera->position.y - camera->target.y;
+    float dz = camera->position.z - camera->target.z;
     angle.x = atan2f(dx, dz);
     angle.y = atan2f(dy, sqrtf(dx*dx + dz*dz));
     previousMousePosition = GetMousePosition();
+    CameraMoveSensitivity = 0.1f;
     DisableCursor();
 }
 
@@ -43,6 +44,8 @@ void Update_Camera(Camera *camera)
     Vector2 mousePositionDelta = { 0.0f, 0.0f };
     Vector2 mousePosition = GetMousePosition();
     float mouseWheelMove = GetMouseWheelMove();
+    CameraMoveSensitivity *= pow(CameraMoveExponential, mouseWheelMove);
+    printf("%f, %f\r", CameraMoveSensitivity, mouseWheelMove);
     bool direction[6] = { IsKeyDown(moveControl[MOVE_FRONT]),
                           IsKeyDown(moveControl[MOVE_BACK]),
                           IsKeyDown(moveControl[MOVE_RIGHT]),
@@ -55,14 +58,14 @@ void Update_Camera(Camera *camera)
     camera->position.x += (sinf(angle.x)*direction[MOVE_BACK] -
                             sinf(angle.x)*direction[MOVE_FRONT] -
                             cosf(angle.x)*direction[MOVE_LEFT] +
-                            cosf(angle.x)*direction[MOVE_RIGHT])/PlayerMoveSensitivity;
+                            cosf(angle.x)*direction[MOVE_RIGHT])*CameraMoveSensitivity;
     camera->position.y += (sinf(angle.y)*direction[MOVE_BACK] -
                             sinf(angle.y)*direction[MOVE_FRONT] +
-                            direction[MOVE_UP] - direction[MOVE_DOWN])/PlayerMoveSensitivity;
+                            direction[MOVE_UP] - direction[MOVE_DOWN])*CameraMoveSensitivity;
     camera->position.z += (cosf(angle.x)*direction[MOVE_BACK] -
                             cosf(angle.x)*direction[MOVE_FRONT] +
                             sinf(angle.x)*direction[MOVE_LEFT] -
-                            sinf(angle.x)*direction[MOVE_RIGHT])/PlayerMoveSensitivity;
+                            sinf(angle.x)*direction[MOVE_RIGHT])*CameraMoveSensitivity;
     angle.x -= (MouseMoveSensitivity * mousePositionDelta.x);
     angle.y += (MouseMoveSensitivity * mousePositionDelta.y);
     angle.y = VAL_LIMIT(angle.y, -1.57f, 1.57f);

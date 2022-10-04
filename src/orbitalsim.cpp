@@ -40,6 +40,7 @@ Orbital_Object::Orbital_Object(int id): _id(id) {
         return -5000.0 / (ans*ans*ans);
     });
     _sim1.Set_SimStep(0.01);
+    _sim1.Set_EnableStore(false);
     _sim1.Initialize();
     _simstep = _sim1.Get_SimStep();
 }

@@ -1,10 +1,10 @@
 #include "orbitalsim.hpp"
 #include "utils.h"
-#include "tracelog.h"
 
 int main(void) {
     /*初始化场景*/
     Camera camera;
+    SetWindowMonitor(1);
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	SetConfigFlags(FLAG_FULLSCREEN_MODE);
     SetTargetFPS(60);
@@ -34,6 +34,7 @@ int main(void) {
     Vector3 vec3d;
     int cnt = 30;
     int showfps=0, showcpu=0;
+    float showspeed;
 
     /*场景循环*/
     while (!WindowShouldClose()) {
@@ -58,9 +59,11 @@ int main(void) {
                 cnt = 0;
                 showfps = GetFPS();
                 showcpu = GetCPUusage();
+                showspeed = GetCameraSpeed();
             }
-            DrawText(TextFormat("%2i FPS", showfps), 0, 0, 20, LIME);
-            DrawText(TextFormat("%2i %%", showcpu), 0, 30, 20, LIME);
+            DrawText(TextFormat("FPS: %2i", showfps), 0, 0, 20, LIME);
+            DrawText(TextFormat("CPU: %2i %%", showcpu), 0, 30, 20, LIME);
+            DrawText(TextFormat("Camera Speed: %.4f", showspeed), 0, 60, 20, LIME);
         EndDrawing();
     }
     CloseGraph();

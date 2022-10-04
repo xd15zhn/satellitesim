@@ -13,6 +13,7 @@ void DrawCPUusage(int cpu);
 
 void Init_Camera(Camera *camera);
 void Update_Camera(Camera *camera);
+float GetCameraSpeed();
 
 #if defined(__cplusplus)
 }
