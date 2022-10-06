@@ -5,7 +5,9 @@
 //--------------------------------------------------------------------------------------------
 Orbital_Object::Orbital_Object(int id): _id(id) {
     /* 3D模型部分 */
-    _scale = 1;
+    _scale = (Vector3) { 1.0f, 1.0f, 1.0f};
+    _rotAxis = (Vector3) { 0.0f, 0.0f, 1.0f};
+    _rotAngle = 0.0f;
     for (int i = 0; i < _oparam._PointNum; i++)
         _Points.push_back(Vector3{0, 0, 0});
 
@@ -54,10 +56,9 @@ void Orbital_Object::Load_Model(const char* objfile, const char* pngfile) {
     Texture2D img = LoadTexture(pngfile);
     _model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = img;
 }
-void Orbital_Object::Update_Model(Matrix transform) {
-    _model.transform = transform;
+void Orbital_Object::Update_Model() {
     Vector3 pos = Get_R();
-    DrawModel(_model, pos, _scale, WHITE);
+    DrawModelEx(_model, pos, _rotAxis, _rotAngle, _scale, WHITE);
     if (!_draw) return;
     Vector3 posstart, posend;
     std::list<Vector3>::iterator it = _Points.begin();
@@ -75,10 +76,12 @@ void Orbital_Object::Update_Model(Matrix transform) {
     _Points.pop_front();
 }
 void Orbital_Object::Set_Scale(float scale) {
-    _scale = scale;
+    _scale = (Vector3) { scale, scale, scale };
 }
 void Orbital_Object::Set_ID(int id) { _id=id; }
 void Orbital_Object::Set_DrawOrbit(bool draw) { _draw=draw; }
+void Orbital_Object::Set_RotationAxis(Vector3 rotationAxis) { _rotAxis = Vector3Normalize(rotationAxis); }
+void Orbital_Object::Set_RotationAngle(float rotationAngle) { _rotAngle = rotationAngle; }
 
 //--------------------------------------------------------------------------------------------
 // 仿真器部分

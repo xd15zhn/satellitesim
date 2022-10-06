@@ -51,8 +51,10 @@ int main(void) {
             BeginMode3D(camera);
                 Update_Skybox();
                 DrawModel(modelEarth, (Vector3){ 0.0f, 0.0f, 0.0f }, 10.0f, WHITE);
-                for (int i = 0; i < 3; i++)
-                    satellites[i].Update_Model(MatrixRotateXYZ((Vector3){0, atan2f(-ShuttleVelocity[i].x, ShuttleVelocity[i].z), 0}));
+                for (int i = 0; i < 3; i++) {
+                    satellites[i].Set_RotationAngle(atan2f(-ShuttleVelocity[i].x, ShuttleVelocity[i].z));
+                    satellites[i].Update_Model();
+                }
             EndMode3D();
             cnt++;
             if (cnt>=30) {

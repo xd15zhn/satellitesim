@@ -20,10 +20,12 @@ public:
     Orbital_Object(int id=0);
     /* 3D模型部分 */
     void Load_Model(const char* objfile, const char* pngfile);
-    void Update_Model(Matrix transform);
+    void Update_Model();
     void Set_Scale(float scale);
     void Set_ID(int id);
     void Set_DrawOrbit(bool draw=true);
+    void Set_RotationAxis(Vector3 rotationAxis);
+    void Set_RotationAngle(float rotationAngle);
 
     /* 仿真器部分 */
     void Simulate(double time);
@@ -37,11 +39,13 @@ public:
 private:
     /* 3D模型部分 */
     Model _model;
-    float _scale;
+    Vector3 _scale;
     std::list<Vector3> _Points;
     OrbitPointParam _oparam;
     int _id=0;
     bool _draw=true;
+    float _rotAngle;
+    Vector3 _rotAxis;
 
     /* 仿真器部分 */
     Simulator _sim1;
