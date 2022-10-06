@@ -21,7 +21,7 @@ public:
     /* 3D模型部分 */
     void Load_Model(const char* objfile, const char* pngfile);
     void Update_Model(Matrix transform);
-    void Set_Scale(double scale);
+    void Set_Scale(float scale);
     void Set_ID(int id);
     void Set_DrawOrbit(bool draw=true);
 
@@ -37,7 +37,7 @@ public:
 private:
     /* 3D模型部分 */
     Model _model;
-    double _scale=1;
+    float _scale;
     std::list<Vector3> _Points;
     OrbitPointParam _oparam;
     int _id=0;

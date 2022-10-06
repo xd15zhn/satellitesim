@@ -5,6 +5,7 @@
 //--------------------------------------------------------------------------------------------
 Orbital_Object::Orbital_Object(int id): _id(id) {
     /* 3D模型部分 */
+    _scale = 1;
     for (int i = 0; i < _oparam._PointNum; i++)
         _Points.push_back(Vector3{0, 0, 0});
 
@@ -56,7 +57,6 @@ void Orbital_Object::Load_Model(const char* objfile, const char* pngfile) {
 void Orbital_Object::Update_Model(Matrix transform) {
     _model.transform = transform;
     Vector3 pos = Get_R();
-    pos = (Vector3){pos.x, pos.z, pos.y};
     DrawModel(_model, pos, _scale, WHITE);
     if (!_draw) return;
     Vector3 posstart, posend;
@@ -74,7 +74,7 @@ void Orbital_Object::Update_Model(Matrix transform) {
     _Points.push_back(pos);
     _Points.pop_front();
 }
-void Orbital_Object::Set_Scale(double scale) {
+void Orbital_Object::Set_Scale(float scale) {
     _scale = scale;
 }
 void Orbital_Object::Set_ID(int id) { _id=id; }
@@ -97,7 +97,7 @@ void Orbital_Object::Set_initR(Vector3 vec) {
     _intrz->Set_InitialValue(vec.z);
     _Points.clear();
     for (int i = 0; i < _oparam._PointNum; i++)
-        _Points.push_back((Vector3){vec.x, vec.z, vec.y});
+        _Points.push_back(vec);
 }
 void Orbital_Object::Set_initV(Vector3 vec) {
     _intvx->Set_InitialValue(vec.x);
