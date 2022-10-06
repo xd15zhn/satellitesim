@@ -8,7 +8,6 @@ int main(void) {
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	SetConfigFlags(FLAG_FULLSCREEN_MODE);
     SetTargetFPS(60);
-    // InitGraph(1024, 768, "RayLib-3D");
     InitGraph(0, 0, "RayLib-3D");
 	Init_Camera(&camera);
     Init_Skybox();
@@ -31,7 +30,6 @@ int main(void) {
 
     /*添加全局变量*/
     Vector3 ShuttleVelocity[3];
-    Vector3 vec3d;
     int cnt = 30;
     int showfps=0, showcpu=0;
     float showspeed;
@@ -40,10 +38,7 @@ int main(void) {
     while (!WindowShouldClose()) {
         for (int i = 0; i < 3; i++) {
             satellites[i].Simulate(10);
-            vec3d = satellites[i].Get_V();
-            ShuttleVelocity[i].x = vec3d.x;
-            ShuttleVelocity[i].y = vec3d.z;
-            ShuttleVelocity[i].z = vec3d.y;
+            ShuttleVelocity[i] = satellites[i].Get_V();
         }
 		Update_Camera(&camera);
         BeginDrawing();
@@ -52,7 +47,7 @@ int main(void) {
                 Update_Skybox();
                 DrawModel(modelEarth, (Vector3){ 0.0f, 0.0f, 0.0f }, 10.0f, WHITE);
                 for (int i = 0; i < 3; i++) {
-                    satellites[i].Set_RotationAngle(atan2f(-ShuttleVelocity[i].x, ShuttleVelocity[i].z));
+                    satellites[i].Set_RotationAngle(atan2f(ShuttleVelocity[i].x, -ShuttleVelocity[i].y));
                     satellites[i].Update_Model();
                 }
             EndMode3D();
