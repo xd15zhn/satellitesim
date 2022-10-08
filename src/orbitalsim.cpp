@@ -1,8 +1,8 @@
 #include "orbitalsim.hpp"
 
-//--------------------------------------------------------------------------------------------
+/****************************************************************
 // 初始化
-//--------------------------------------------------------------------------------------------
+****************************************************************/
 Orbital_Object::Orbital_Object(int id): _id(id) {
     /* 3D模型部分 */
     _scale = (Vector3) { 1.0f, 1.0f, 1.0f};
@@ -48,9 +48,10 @@ Orbital_Object::Orbital_Object(int id): _id(id) {
     _simstep = _sim1.Get_SimStep();
 }
 
-//--------------------------------------------------------------------------------------------
+
+/****************************************************************
 // 3D模型部分
-//--------------------------------------------------------------------------------------------
+****************************************************************/
 void Orbital_Object::Load_Model(const char* objfile, const char* pngfile) {
     _model = LoadModel(objfile);
     Texture2D img = LoadTexture(pngfile);
@@ -83,9 +84,10 @@ void Orbital_Object::Set_DrawOrbit(bool draw) { _draw=draw; }
 void Orbital_Object::Set_RotationAxis(Vector3 rotationAxis) { _rotAxis = Vector3Normalize(rotationAxis); }
 void Orbital_Object::Set_RotationAngle(float rotationAngle) { _rotAngle = rotationAngle; }
 
-//--------------------------------------------------------------------------------------------
+
+/****************************************************************
 // 仿真器部分
-//--------------------------------------------------------------------------------------------
+****************************************************************/
 void Orbital_Object::Simulate(double time) {
     int stepcnt = (int)(time/_simstep/1000.0+0.5);
     for (int i=0; i<stepcnt; ++i)
