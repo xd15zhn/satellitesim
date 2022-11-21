@@ -1,4 +1,5 @@
 #include "orbitalsim.hpp"
+constexpr double muEarth = 398601E-10;
 
 /****************************************************************
 // 初始化
@@ -8,8 +9,6 @@ Orbital_Object::Orbital_Object(int id): _id(id) {
     _scale = (Vector3) { 1.0f, 1.0f, 1.0f};
     _rotAxis = (Vector3) { 0.0f, 0.0f, 1.0f};
     _rotAngle = 0.0f;
-    for (int i = 0; i < _oparam._PointNum; i++)
-        _Points.push_back(Vector3{0, 0, 0});
 
     /* 仿真器部分 */
     SUIntegrator(_intrx, &_sim1);
@@ -40,7 +39,7 @@ Orbital_Object::Orbital_Object(int id): _id(id) {
     _misomur->Set_Function([](double *u){
         double ans = u[0]*u[0] + u[1]*u[1] + u[2]*u[2];
         ans = sqrt(ans);
-        return -5000.0 / (ans*ans*ans);
+        return -muEarth / (ans*ans*ans);
     });
     _sim1.Set_SimStep(0.01);
     _sim1.Set_EnableStore(false);
@@ -88,9 +87,8 @@ void Orbital_Object::Set_RotationAngle(float rotationAngle) { _rotAngle = rotati
 /****************************************************************
 // 仿真器部分
 ****************************************************************/
-void Orbital_Object::Simulate(double time) {
-    int stepcnt = (int)(time/_simstep/1000.0+0.5);
-    for (int i=0; i<stepcnt; ++i)
+void Orbital_Object::Simulate(int time) {
+    for (int i=0; i<time; ++i)
         _sim1.Simulate_OneStep();
 }
 void Orbital_Object::Set_initRV(Vector3 vecR, Vector3 vecV) {
@@ -102,7 +100,7 @@ void Orbital_Object::Set_initR(Vector3 vec) {
     _intrz->Set_InitialValue(vec.z);
     _Points.clear();
     for (int i = 0; i < _oparam._PointNum; i++)
-        _Points.push_back(vec);
+        _Points.push_back(Vector3Scale(vec, 100.0));
 }
 void Orbital_Object::Set_initV(Vector3 vec) {
     _intvx->Set_InitialValue(vec.x);
@@ -111,9 +109,9 @@ void Orbital_Object::Set_initV(Vector3 vec) {
 }
 Vector3 Orbital_Object::Get_R() {
     return Vector3{
-        (float)(_intrx->Get_OutValue()),
-        (float)(_intry->Get_OutValue()),
-        (float)(_intrz->Get_OutValue())};
+        (float)(_intrx->Get_OutValue()*100.0),
+        (float)(_intry->Get_OutValue()*100.0),
+        (float)(_intrz->Get_OutValue()*100.0)};
 }
 Vector3 Orbital_Object::Get_V() {
     return Vector3{

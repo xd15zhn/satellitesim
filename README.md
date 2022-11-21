@@ -23,3 +23,22 @@ sun.png
 ```
 如果电脑里没有C++环境或者没安装mingw，可能会提示缺少`libgcc_s_sjlj-1.dll`或`libstdc++-6.dll`，或者是类似"无法定位程序输入点于动态链接库上"的问题，将附件中的这两个文件放到`satellitesim.exe`同级目录下，或直接放入`C:\Windows\System32`目录下即可。  
 运行后，如果背景为纯黑或模型显示不正常，请再次检查`resources`和所有资源文件的名称是否严格正确。
+
+# 准备
+下载所有代码和依赖库
+- <https://github.com/glfw/glfw/releases/latest>
+- <https://gitee.com/xd15zhn/tracelog>
+- <https://gitee.com/xd15zhn/raylib>
+- <https://gitee.com/xd15zhn/simucpp>
+- <https://gitee.com/xd15zhn/satellitesim>
+- <https://gitee.com/xd15zhn/matplotlibcpp> (选装)
+- <https://gitee.com/xd15zhn/zhnmat> (选装)
+
+# 安装
+如果最新版出现不兼容的问题，建议在文末的链接中下载兼容版本。
+
+# 其他参考链接
+相关安装包: https://pan.baidu.com/s/1aAsfMtUq8xDsXYiGu8K3Tg 提取码: 2nkd  
+- [Ubuntu下搭建OpenGL开发环境](https://blog.csdn.net/l1216766050/article/details/102787618)
+- [下载安装MinGW-w64详细步骤](https://blog.csdn.net/jjxcsdn/article/details/123058745)
+- [地球、月球及其他星球星空贴图](http://h.shanse8.com/read.php?tid-47872-ordertype-desc-displayMode-1.html)

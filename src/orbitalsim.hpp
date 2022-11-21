@@ -9,8 +9,8 @@
 using namespace simucpp;
 
 struct OrbitPointParam {
-    int _PointNum=128;
-    int _PointInterval=10;
+    int _PointNum=256;
+    int _PointInterval=4;
     int _cnt=0;
 };
 
@@ -28,7 +28,7 @@ public:
     void Set_RotationAngle(float rotationAngle);
 
     /* 仿真器部分 */
-    void Simulate(double time);
+    void Simulate(int time);
     void Set_initRV(Vector3 vecR, Vector3 vecV);
     void Set_initR(Vector3 vec);
     void Set_initV(Vector3 vec);

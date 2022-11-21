@@ -14,13 +14,14 @@ int main(void) {
 
     /*加载卫星*/
     Orbital_Object satellites[3];
-    satellites[0].Set_initRV(Vector3{15, 0, 0}, Vector3{0, 20, 0});
-    satellites[1].Set_initRV(Vector3{15, 0, 5}, Vector3{0, 21, 0});
-    satellites[2].Set_initRV(Vector3{15, 1, -5}, Vector3{0, 20, 0});
+    float tempv=0.064;
+    satellites[0].Set_initRV(Vector3{-0.01, 0, 0}, Vector3{0, tempv, 0});
+    satellites[1].Set_initRV(Vector3{-0.01, 0, 0}, Vector3{0, tempv, 0});
+    satellites[2].Set_initRV(Vector3{-0.01, 0, 0}, Vector3{0, tempv, 0});
     for (int i = 0; i < 3; i++) {
         satellites[i].Set_ID(i);
         satellites[i].Load_Model("resources/satellite.obj", "resources/satellite.png");
-        satellites[i].Set_Scale(0.01);
+        satellites[i].Set_Scale(1e-3);
     }
 
     /*加载地球模型和纹理*/
@@ -37,7 +38,7 @@ int main(void) {
     /*场景循环*/
     while (!WindowShouldClose()) {
         for (int i = 0; i < 3; i++) {
-            satellites[i].Simulate(10);
+            satellites[i].Simulate(1);
             ShuttleVelocity[i] = satellites[i].Get_V();
         }
 		Update_Camera(&camera);
@@ -45,7 +46,7 @@ int main(void) {
             ClearBackground(RAYWHITE);
             BeginMode3D(camera);
                 Update_Skybox();
-                DrawModel(modelEarth, (Vector3){ 0.0f, 0.0f, 0.0f }, 10.0f, WHITE);
+                DrawModel(modelEarth, (Vector3){ 0.0f, 0.0f, 0.0f }, 0.9f, WHITE);
                 for (int i = 0; i < 3; i++) {
                     satellites[i].Set_RotationAngle(atan2f(ShuttleVelocity[i].x, -ShuttleVelocity[i].y));
                     satellites[i].Update_Model();
