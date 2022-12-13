@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <stdio.h>
 
 Model skybox;
 
@@ -23,5 +24,9 @@ void Update_Skybox() {
     EndBackground();
 }
 
-void DrawFPS(int fps) { DrawText(TextFormat("%2i FPS", fps), 0, 0, 20, LIME); }
-void DrawCPUusage(int cpu) { DrawText(TextFormat("%2i %%", cpu), 0, 30, 20, LIME); }
+void Print(float* a) {
+    int frame = a[0];
+    printf("Frame: %d;  ", frame);
+    printf("Speed: %.4f;  ", a[1]);
+    printf("Location: %.4f, %.4f, %.4f        \r",a[2], a[3], a[4]);
+}
